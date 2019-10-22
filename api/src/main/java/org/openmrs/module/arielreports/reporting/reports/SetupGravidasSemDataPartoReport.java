@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Properties;
 import org.openmrs.Location;
 import org.openmrs.module.arielreports.ArielDataExportManager;
-import org.openmrs.module.arielreports.reporting.library.queries.ReportQueries;
-import org.openmrs.module.reporting.dataset.definition.DataSetDefinition;
-import org.openmrs.module.reporting.dataset.definition.SqlDataSetDefinition;
+import org.openmrs.module.arielreports.reporting.library.datasets.ArielReportsDataSets;
 import org.openmrs.module.reporting.evaluation.parameter.Mapped;
 import org.openmrs.module.reporting.evaluation.parameter.Parameter;
 import org.openmrs.module.reporting.report.ReportDesign;
@@ -18,7 +16,7 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupReport extends ArielDataExportManager {
+public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
@@ -75,19 +73,11 @@ public class SetupReport extends ArielDataExportManager {
     rd.setName(getName());
     rd.setDescription(getDescription());
     rd.setParameters(getParameters());
-    rd.addDataSetDefinition("GRAVIDAS", Mapped.mapStraightThrough(dataSetDefinition()));
+    rd.addDataSetDefinition(
+        "GRAVIDAS",
+        Mapped.mapStraightThrough(
+            ArielReportsDataSets.getGravidasSemDataPartoDataSet(getParameters())));
     return rd;
-  }
-
-  private DataSetDefinition dataSetDefinition() {
-
-    SqlDataSetDefinition dsd = new SqlDataSetDefinition();
-
-    dsd.setName("G");
-    dsd.setParameters(getParameters());
-    dsd.setSqlQuery(ReportQueries.GRAVIDAS);
-
-    return dsd;
   }
 
   @Override

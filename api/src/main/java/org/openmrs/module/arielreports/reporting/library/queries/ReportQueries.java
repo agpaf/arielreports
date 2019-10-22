@@ -34,6 +34,7 @@ public class ReportQueries {
           + ") lab "
       /*+ "and art_status.location = :location"*/ ;
 
+  /** Mulheres Grávidas a mais de 9 meses sem data de parto */
   public static final String GRAVIDAS =
       "select * \n"
           + "from \n"
@@ -270,4 +271,46 @@ public class ReportQueries {
           + "	) confidente on inicio.patient_id=confidente.patient_id\n"
           + ") coortes\n"
           + "group by patient_id";
+
+  /** Pacientes com CV < 0 */
+  public static final String PACIENTES_CV_NEGATIVA =
+      "Select p.patient_id,\n"
+          + "	pid.identifier as nid, \n"
+          + "	concat(ifnull(pn.given_name,''),' ',ifnull(pn.middle_name,''),' ',ifnull(pn.family_name,'')) as nome_completo,\n"
+          + "	o.value_numeric valor_cv,\n"
+          + "	o.obs_datetime data_cv\n"
+          + "from patient p\n"
+          + "inner join encounter e on p.patient_id=e.patient_id\n"
+          + "inner join obs o on e.encounter_id=o.encounter_id				\n"
+          + "left join 			\n"
+          + "(	select pn1.*\n"
+          + "	from person_name pn1\n"
+          + "	inner join \n"
+          + "	(\n"
+          + "		select person_id,min(person_name_id) id \n"
+          + "		from person_name\n"
+          + "		where voided=0\n"
+          + "		group by person_id\n"
+          + "	) pn2\n"
+          + "	where pn1.person_id=pn2.person_id and pn1.person_name_id=pn2.id\n"
+          + ") pn on pn.person_id=p.patient_id			\n"
+          + "left join\n"
+          + "(   select pid1.*\n"
+          + "	from patient_identifier pid1\n"
+          + "	inner join\n"
+          + "	(\n"
+          + "		select patient_id,min(patient_identifier_id) id\n"
+          + "		from patient_identifier\n"
+          + "		where voided=0\n"
+          + "		group by patient_id\n"
+          + "	) pid2\n"
+          + "	where pid1.patient_id=pid2.patient_id and pid1.patient_identifier_id=pid2.id\n"
+          + ") pid on pid.patient_id=p.patient_id\n"
+          + "where p.voided=0 and e.voided=0 and o.voided=0 \n"
+          + "and e.encounter_type in (13,6,9) \n"
+          + "and o.concept_id=856 \n"
+          + "and o.value_numeric is not null\n"
+          + "and o.value_numeric < 0\n"
+          + "and e.encounter_datetime < :endDate \n"
+          + "and e.location_id=:location";
 }

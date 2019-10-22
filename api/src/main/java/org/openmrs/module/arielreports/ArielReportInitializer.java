@@ -35,17 +35,27 @@ public class ArielReportInitializer implements Initializer {
     // report version all the time for change
     log.warn("Removing all reports");
     // getting id of the loaded report designs
-    String report_resource_quality_improvement_id =
+    String report_resource_gravidas_id =
         "select id from reporting_report_design where uuid='b69d36ae-e9d8-11e9-aba8-7f11132c9956'";
+    String report_resource_cv_neg_id =
+        "select id from reporting_report_design where uuid='51ca24ca-f4ce-11e9-b0c2-a72117e556d1'";
     // deleting the resource already loaded
     as.executeSQL(
         "delete from reporting_report_design_resource where report_design_id =("
-            + report_resource_quality_improvement_id
+            + report_resource_gravidas_id
+            + ");",
+        false);
+    as.executeSQL(
+        "delete from reporting_report_design_resource where report_design_id =("
+            + report_resource_cv_neg_id
             + ");",
         false);
     // deleting the actual designs now
     as.executeSQL(
         "delete from reporting_report_design where uuid='b69d36ae-e9d8-11e9-aba8-7f11132c9956';",
+        false);
+    as.executeSQL(
+        "delete from reporting_report_design where uuid='51ca24ca-f4ce-11e9-b0c2-a72117e556d1';",
         false);
 
     // deleting all report requests and managers
@@ -56,6 +66,9 @@ public class ArielReportInitializer implements Initializer {
     // deleting the actual report definitions from the db
     as.executeSQL(
         "delete from serialized_object WHERE uuid = 'dc98f7c6-e9d8-11e9-a398-dfe515d7157b';",
+        false);
+    as.executeSQL(
+        "delete from serialized_object WHERE uuid = '5b2dfa78-f4ce-11e9-b5df-133059d1eedd';",
         false);
   }
 }
