@@ -12,7 +12,7 @@ public class ArielReportsDataSets {
 
     SqlDataSetDefinition dsd = new SqlDataSetDefinition();
 
-    dsd.setName("G");
+    dsd.setName("GRAVIDAS");
     dsd.setParameters(parameters);
     dsd.setSqlQuery(ReportQueries.GRAVIDAS);
 
@@ -23,9 +23,31 @@ public class ArielReportsDataSets {
 
     SqlDataSetDefinition dsd = new SqlDataSetDefinition();
 
-    dsd.setName("G");
+    dsd.setName("CARGA VIRAL");
     dsd.setParameters(parameters);
     dsd.setSqlQuery(ReportQueries.PACIENTES_CV_NEGATIVA);
+
+    return dsd;
+  }
+
+  public static DataSetDefinition getPacientesInscritosDataSet(List<Parameter> parameters) {
+
+    SqlDataSetDefinition dsd = new SqlDataSetDefinition();
+
+    dsd.setName("INSCRITOS");
+    dsd.setParameters(parameters);
+    dsd.setSqlQuery(ReportQueries.INSCRITOS_SERVICO_TARV);
+
+    return dsd;
+  }
+
+  public static DataSetDefinition getPacientesCoorteTARVDataSet(List<Parameter> parameters) {
+
+    SqlDataSetDefinition dsd = new SqlDataSetDefinition();
+
+    dsd.setName("COORTE");
+    dsd.setParameters(parameters);
+    dsd.setSqlQuery(ReportQueries.PACIENTES_COORTE_TARV);
 
     return dsd;
   }

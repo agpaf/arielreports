@@ -88,7 +88,7 @@ public class SetupPacientesCVNegativaReport extends ArielDataExportManager {
   @Override
   public List<Parameter> getParameters() {
     return Arrays.asList(
-        new Parameter("endDate", "End Date", Date.class),
-        new Parameter("location", "Location", Location.class));
+        new Parameter("endDate", "Data Final", Date.class),
+        new Parameter("location", "Unidade Sanitária", Location.class));
   }
 }

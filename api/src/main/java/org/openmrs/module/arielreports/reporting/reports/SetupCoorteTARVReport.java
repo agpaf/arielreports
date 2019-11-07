@@ -16,11 +16,11 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
+public class SetupCoorteTARVReport extends ArielDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
-    return "b69d36ae-e9d8-11e9-aba8-7f11132c9956";
+    return "0bfecfee-007d-11ea-a9af-2ff361bc46d2";
   }
 
   @Override
@@ -37,12 +37,12 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
       reportDesign =
           createXlsReportDesign(
               reportDefinition,
-              "ListaGravidasSemDataParto.xls",
-              "GRÁVIDAS SEM DATA DE PARTO",
+              "ListaCoorteTARV.xls",
+              "PACIENTES COORTE TARV",
               getExcelDesignUuid(),
               null);
       Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:8,dataset:GRAVIDAS");
+      props.put("repeatingSections", "sheet:1,row:8,dataset:COORTE");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (IOException e) {
@@ -53,17 +53,17 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
 
   @Override
   public String getUuid() {
-    return "dc98f7c6-e9d8-11e9-a398-dfe515d7157b";
+    return "163d633a-007d-11ea-804e-c747238eff63";
   }
 
   @Override
   public String getName() {
-    return "ARIEL - LISTA DE GRÁVIDAS COM MAIS DE 9 MESES QUE NÃO TEM DATA DE PARTO";
+    return "ARIEL - LISTA DE PACIENTES NA COORTE TARV (MASTER CARD)";
   }
 
   @Override
   public String getDescription() {
-    return "São pacientes registadas como grávidas há mais de 9 meses e que não têm data de parto registada";
+    return "São pacientes na Coorte TARV";
   }
 
   @Override
@@ -74,9 +74,9 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
     rd.setDescription(getDescription());
     rd.setParameters(getParameters());
     rd.addDataSetDefinition(
-        "GRAVIDAS",
+        "COORTE",
         Mapped.mapStraightThrough(
-            ArielReportsDataSets.getGravidasSemDataPartoDataSet(getParameters())));
+            ArielReportsDataSets.getPacientesCoorteTARVDataSet(getParameters())));
     return rd;
   }
 
@@ -90,6 +90,7 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
     return Arrays.asList(
         new Parameter("startDate", "Data Inicial", Date.class),
         new Parameter("endDate", "Data Final", Date.class),
+        new Parameter("dateCoorte", "Data Avaliação Coorte", Date.class),
         new Parameter("location", "Unidade Sanitária", Location.class));
   }
 }

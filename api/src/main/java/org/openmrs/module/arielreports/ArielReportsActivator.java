@@ -9,10 +9,9 @@
  */
 package org.openmrs.module.arielreports;
 
-import java.util.ArrayList;
-import java.util.List;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.BaseModuleActivator;
 
 /**
@@ -22,25 +21,50 @@ public class ArielReportsActivator extends BaseModuleActivator {
 
   private Log log = LogFactory.getLog(this.getClass());
 
-  public List<Initializer> getInitializers() {
-    List<Initializer> l = new ArrayList<Initializer>();
-    l.add(new ArielReportInitializer());
-    return l;
+  private ArielReportInitializer reportsInitializer = new ArielReportInitializer();
+
+  @Override
+  public void contextRefreshed() {
+    log.debug("Ariel Reports Module refreshed");
+  }
+
+  @Override
+  public void willRefreshContext() {
+    log.debug("Refreshing Ariel Reports Module");
+  }
+
+  @Override
+  public void willStart() {
+    log.debug("Starting Ariel Reports Module");
+  }
+
+  @Override
+  public void willStop() {
+    log.debug("Stopping Ariel Reports Module");
+    try {
+      reportsInitializer.purgeReports();
+      log.debug("Ariel Reports purged");
+    } catch (Exception e) {
+      log.error("An error occured trying to purge Ariel reports", e);
+    }
   }
 
   /** @see #started() */
   public void started() {
-    log.info("eSaude Reports module started - initializing...");
-    for (Initializer initializer : getInitializers()) {
-      initializer.started();
+    try {
+      reportsInitializer.initializeReports();
+      log.info("Started Ariel Reports Module");
+    } catch (MetadataLookupException e) {
+      Context.getAlertService().notifySuperUsers("eptsreports.startuperror.globalproperties", null);
+      throw e;
+    } catch (Exception e) {
+      Context.getAlertService().notifySuperUsers("eptsreports.startuperror.general", null);
+      throw e;
     }
   }
 
-  @Override
+  /** @see #stopped() */
   public void stopped() {
-    for (int i = getInitializers().size() - 1; i >= 0; i--) {
-      getInitializers().get(i).stopped();
-    }
-    log.info("eSaude Reports module stopped");
+    log.info("Stopped Ariel Reports Module");
   }
 }

@@ -1,74 +1,54 @@
+/*
+ * The contents of this file are subject to the OpenMRS Public License
+ * Version 1.0 (the "License"); you may not use this file except in
+ * compliance with the License. You may obtain a copy of the License at
+ * http://license.openmrs.org
+ *
+ * Software distributed under the License is distributed on an "AS IS"
+ * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See the
+ * License for the specific language governing rights and limitations
+ * under the License.
+ *
+ * Copyright (C) OpenMRS, LLC.  All Rights Reserved.
+ */
+
 package org.openmrs.module.arielreports;
 
-/** Created by codehub on 06/10/19. */
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.api.AdministrationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.module.arielreports.reporting.utils.ReportUtils;
 import org.openmrs.module.reporting.ReportingConstants;
-import org.openmrs.module.reporting.report.manager.ReportManagerUtil;
+import org.openmrs.module.reporting.report.manager.ReportManager;
 import org.openmrs.module.reporting.report.util.ReportUtil;
 
-/** Initializes reports */
-public class ArielReportInitializer implements Initializer {
+public class ArielReportInitializer {
 
-  protected static final Log log = LogFactory.getLog(ArielReportInitializer.class);
+  private Log log = LogFactory.getLog(this.getClass());
 
-  /** @see Initializer#started() */
-  @Override
-  public synchronized void started() {
-    removeOldReports();
-
-    ReportManagerUtil.setupAllReports(ArielReportManager.class);
+  /** Initializes all Ariel reports and remove deprecated reports from database. */
+  public void initializeReports() {
+    for (ReportManager reportManager : Context.getRegisteredComponents(ArielReportManager.class)) {
+      if (reportManager.getClass().getAnnotation(Deprecated.class) != null) {
+        // remove deprecated reports
+        ReportUtils.purgeReportDefinition(reportManager);
+        log.info(
+            "Report " + reportManager.getName() + " is deprecated.  Removing it from database.");
+      } else {
+        // setup Ariel active reports
+        ReportUtils.setupReportDefinition(reportManager);
+        log.info("Setting up report " + reportManager.getName() + "...");
+      }
+    }
     ReportUtil.updateGlobalProperty(
         ReportingConstants.GLOBAL_PROPERTY_DATA_EVALUATION_BATCH_SIZE, "-1");
   }
 
-  /** @see Initializer#stopped() */
-  @Override
-  public void stopped() {}
-
-  private void removeOldReports() {
-    AdministrationService as = Context.getAdministrationService();
-    // the purpose of this snipet is to allow rapid development other than going to
-    // change the
-    // report version all the time for change
-    log.warn("Removing all reports");
-    // getting id of the loaded report designs
-    String report_resource_gravidas_id =
-        "select id from reporting_report_design where uuid='b69d36ae-e9d8-11e9-aba8-7f11132c9956'";
-    String report_resource_cv_neg_id =
-        "select id from reporting_report_design where uuid='51ca24ca-f4ce-11e9-b0c2-a72117e556d1'";
-    // deleting the resource already loaded
-    as.executeSQL(
-        "delete from reporting_report_design_resource where report_design_id =("
-            + report_resource_gravidas_id
-            + ");",
-        false);
-    as.executeSQL(
-        "delete from reporting_report_design_resource where report_design_id =("
-            + report_resource_cv_neg_id
-            + ");",
-        false);
-    // deleting the actual designs now
-    as.executeSQL(
-        "delete from reporting_report_design where uuid='b69d36ae-e9d8-11e9-aba8-7f11132c9956';",
-        false);
-    as.executeSQL(
-        "delete from reporting_report_design where uuid='51ca24ca-f4ce-11e9-b0c2-a72117e556d1';",
-        false);
-
-    // deleting all report requests and managers
-    as.executeSQL("delete from reporting_report_request;", false);
-    as.executeSQL(
-        "delete from global_property WHERE property LIKE 'reporting.reportManager%';", false);
-
-    // deleting the actual report definitions from the db
-    as.executeSQL(
-        "delete from serialized_object WHERE uuid = 'dc98f7c6-e9d8-11e9-a398-dfe515d7157b';",
-        false);
-    as.executeSQL(
-        "delete from serialized_object WHERE uuid = '5b2dfa78-f4ce-11e9-b5df-133059d1eedd';",
-        false);
+  /** Purges all Ariel reports from database. */
+  public void purgeReports() {
+    for (ReportManager reportManager : Context.getRegisteredComponents(ArielReportManager.class)) {
+      ReportUtils.purgeReportDefinition(reportManager);
+      log.info("Report " + reportManager.getName() + " removed from database.");
+    }
   }
 }
