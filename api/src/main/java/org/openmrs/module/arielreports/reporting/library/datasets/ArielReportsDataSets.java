@@ -51,4 +51,16 @@ public class ArielReportsDataSets {
 
     return dsd;
   }
+
+  public static DataSetDefinition getVisitasComRastreiosProfilaxiasDataSet(
+      List<Parameter> parameters) {
+
+    SqlDataSetDefinition dsd = new SqlDataSetDefinition();
+
+    dsd.setName("VISITAS");
+    dsd.setParameters(parameters);
+    dsd.setSqlQuery(ReportQueries.VISITAS_RASTREIOS_PROFILAXIAS);
+
+    return dsd;
+  }
 }
