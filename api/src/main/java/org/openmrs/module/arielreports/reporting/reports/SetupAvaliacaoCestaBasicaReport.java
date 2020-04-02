@@ -16,11 +16,11 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
+public class SetupAvaliacaoCestaBasicaReport extends ArielDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
-    return "b69d36ae-e9d8-11e9-aba8-7f11132c9956";
+    return "56d200bc-70e0-11ea-ad0e-970287244e1c";
   }
 
   @Override
@@ -37,12 +37,12 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
       reportDesign =
           createXlsReportDesign(
               reportDefinition,
-              "ListaGravidasSemDataParto.xls",
-              "GRÁVIDAS SEM DATA DE PARTO",
+              "AvaliacaoCestaBasica.xls",
+              "CESTA BASICA",
               getExcelDesignUuid(),
               null);
       Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:8,dataset:GRAVIDAS");
+      props.put("repeatingSections", "sheet:1,row:8,dataset:CESTABASICA");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (IOException e) {
@@ -53,17 +53,17 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
 
   @Override
   public String getUuid() {
-    return "dc98f7c6-e9d8-11e9-a398-dfe515d7157b";
+    return "5cefc65a-70e0-11ea-aa7a-ab117d00f58a";
   }
 
   @Override
   public String getName() {
-    return "ARIEL - LISTA DE GRÁVIDAS COM MAIS DE 9 MESES QUE NÃO TEM DATA DE PARTO";
+    return "ARIEL - AVALIAÇÃO CESTA BÁSICA";
   }
 
   @Override
   public String getDescription() {
-    return "São pacientes registadas como grávidas há mais de 9 meses e que não têm data de parto registada";
+    return "São pacientes na cesta básica";
   }
 
   @Override
@@ -74,15 +74,15 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
     rd.setDescription(getDescription());
     rd.setParameters(getParameters());
     rd.addDataSetDefinition(
-        "GRAVIDAS",
+        "CESTABASICA",
         Mapped.mapStraightThrough(
-            ArielReportsDataSets.getGravidasSemDataPartoDataSet(getParameters())));
+            ArielReportsDataSets.getAvaliacaoCestaBasicaDataSet(getParameters())));
     return rd;
   }
 
   @Override
   public String getVersion() {
-    return "0.3";
+    return "0.1";
   }
 
   @Override

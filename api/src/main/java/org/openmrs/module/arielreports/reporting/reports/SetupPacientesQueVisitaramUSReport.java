@@ -16,11 +16,11 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
+public class SetupPacientesQueVisitaramUSReport extends ArielDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
-    return "b69d36ae-e9d8-11e9-aba8-7f11132c9956";
+    return "23544082-3068-11ea-aa4e-8f93985e52dc";
   }
 
   @Override
@@ -36,13 +36,9 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
     try {
       reportDesign =
           createXlsReportDesign(
-              reportDefinition,
-              "ListaGravidasSemDataParto.xls",
-              "GRÁVIDAS SEM DATA DE PARTO",
-              getExcelDesignUuid(),
-              null);
+              reportDefinition, "ListaVisitas.xls", "VISITAS", getExcelDesignUuid(), null);
       Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:8,dataset:GRAVIDAS");
+      props.put("repeatingSections", "sheet:1,row:8,dataset:VISITAS");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (IOException e) {
@@ -53,17 +49,17 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
 
   @Override
   public String getUuid() {
-    return "dc98f7c6-e9d8-11e9-a398-dfe515d7157b";
+    return "2fc70cc8-3068-11ea-a11e-53bd500dd7a4";
   }
 
   @Override
   public String getName() {
-    return "ARIEL - LISTA DE GRÁVIDAS COM MAIS DE 9 MESES QUE NÃO TEM DATA DE PARTO";
+    return "ARIEL - LISTA DE PACIENTES QUE VISITARAM A US";
   }
 
   @Override
   public String getDescription() {
-    return "São pacientes registadas como grávidas há mais de 9 meses e que não têm data de parto registada";
+    return "Sao pacientes que visitaram a unidade sanitária num determinado periodo";
   }
 
   @Override
@@ -74,15 +70,15 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
     rd.setDescription(getDescription());
     rd.setParameters(getParameters());
     rd.addDataSetDefinition(
-        "GRAVIDAS",
+        "VISITAS",
         Mapped.mapStraightThrough(
-            ArielReportsDataSets.getGravidasSemDataPartoDataSet(getParameters())));
+            ArielReportsDataSets.getPacientesQueVisitaramUS(getParameters())));
     return rd;
   }
 
   @Override
   public String getVersion() {
-    return "0.3";
+    return "0.2";
   }
 
   @Override

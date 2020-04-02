@@ -82,7 +82,7 @@ public class SetupInscritosReport extends ArielDataExportManager {
 
   @Override
   public String getVersion() {
-    return "0.1";
+    return "0.3";
   }
 
   @Override

@@ -16,11 +16,11 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
+public class SetupMulheresVIAReport extends ArielDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
-    return "b69d36ae-e9d8-11e9-aba8-7f11132c9956";
+    return "cb8f2ae6-74b5-11ea-a625-2bb805a04153";
   }
 
   @Override
@@ -36,13 +36,9 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
     try {
       reportDesign =
           createXlsReportDesign(
-              reportDefinition,
-              "ListaGravidasSemDataParto.xls",
-              "GRÁVIDAS SEM DATA DE PARTO",
-              getExcelDesignUuid(),
-              null);
+              reportDefinition, "MulheresVia.xls", "MULHERES VIA", getExcelDesignUuid(), null);
       Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:8,dataset:GRAVIDAS");
+      props.put("repeatingSections", "sheet:1,row:8,dataset:VIA");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (IOException e) {
@@ -53,17 +49,17 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
 
   @Override
   public String getUuid() {
-    return "dc98f7c6-e9d8-11e9-a398-dfe515d7157b";
+    return "d507ee32-74b5-11ea-8af0-23860c21ee23";
   }
 
   @Override
   public String getName() {
-    return "ARIEL - LISTA DE GRÁVIDAS COM MAIS DE 9 MESES QUE NÃO TEM DATA DE PARTO";
+    return "ARIEL - LISTA DE MULHERES COM E SEM VIA";
   }
 
   @Override
   public String getDescription() {
-    return "São pacientes registadas como grávidas há mais de 9 meses e que não têm data de parto registada";
+    return "São mulheres de 15 a 49 anos com e sem VIA";
   }
 
   @Override
@@ -74,21 +70,19 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
     rd.setDescription(getDescription());
     rd.setParameters(getParameters());
     rd.addDataSetDefinition(
-        "GRAVIDAS",
-        Mapped.mapStraightThrough(
-            ArielReportsDataSets.getGravidasSemDataPartoDataSet(getParameters())));
+        "VIA",
+        Mapped.mapStraightThrough(ArielReportsDataSets.getMulheresViaDataSet(getParameters())));
     return rd;
   }
 
   @Override
   public String getVersion() {
-    return "0.3";
+    return "0.1";
   }
 
   @Override
   public List<Parameter> getParameters() {
     return Arrays.asList(
-        new Parameter("startDate", "Data Inicial", Date.class),
         new Parameter("endDate", "Data Final", Date.class),
         new Parameter("location", "Unidade Sanitária", Location.class));
   }

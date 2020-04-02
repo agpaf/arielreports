@@ -16,11 +16,11 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
+public class SetupSuspeitosFalenciaReport extends ArielDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
-    return "b69d36ae-e9d8-11e9-aba8-7f11132c9956";
+    return "672f3f6a-166d-11ea-8bd7-7f28186d8afa";
   }
 
   @Override
@@ -37,12 +37,12 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
       reportDesign =
           createXlsReportDesign(
               reportDefinition,
-              "ListaGravidasSemDataParto.xls",
-              "GRÁVIDAS SEM DATA DE PARTO",
+              "ListaSuspeitaFalencia.xls",
+              "SUSPEITAS FALENCIA",
               getExcelDesignUuid(),
               null);
       Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:8,dataset:GRAVIDAS");
+      props.put("repeatingSections", "sheet:1,row:8,dataset:FALENCIA");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (IOException e) {
@@ -53,17 +53,17 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
 
   @Override
   public String getUuid() {
-    return "dc98f7c6-e9d8-11e9-a398-dfe515d7157b";
+    return "6d6d281a-166d-11ea-bd78-5be17142aad9";
   }
 
   @Override
   public String getName() {
-    return "ARIEL - LISTA DE GRÁVIDAS COM MAIS DE 9 MESES QUE NÃO TEM DATA DE PARTO";
+    return "ARIEL - LISTA DE PACIENTES COM SUSPEITA DE FALENCIA TERAPEUTICA";
   }
 
   @Override
   public String getDescription() {
-    return "São pacientes registadas como grávidas há mais de 9 meses e que não têm data de parto registada";
+    return "São pacientes com suspeita de falência terapêutica";
   }
 
   @Override
@@ -74,15 +74,15 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
     rd.setDescription(getDescription());
     rd.setParameters(getParameters());
     rd.addDataSetDefinition(
-        "GRAVIDAS",
+        "FALENCIA",
         Mapped.mapStraightThrough(
-            ArielReportsDataSets.getGravidasSemDataPartoDataSet(getParameters())));
+            ArielReportsDataSets.getSuspeitosFalenciaDataSet(getParameters())));
     return rd;
   }
 
   @Override
   public String getVersion() {
-    return "0.3";
+    return "0.2";
   }
 
   @Override

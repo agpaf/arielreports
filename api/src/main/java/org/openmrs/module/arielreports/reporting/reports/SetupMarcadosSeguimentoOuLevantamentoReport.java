@@ -16,11 +16,11 @@ import org.openmrs.module.reporting.report.definition.ReportDefinition;
 import org.springframework.stereotype.Component;
 
 @Component
-public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
+public class SetupMarcadosSeguimentoOuLevantamentoReport extends ArielDataExportManager {
 
   @Override
   public String getExcelDesignUuid() {
-    return "b69d36ae-e9d8-11e9-aba8-7f11132c9956";
+    return "b5dc5704-32ee-11ea-a3df-435b0c6854d6";
   }
 
   @Override
@@ -37,12 +37,12 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
       reportDesign =
           createXlsReportDesign(
               reportDefinition,
-              "ListaGravidasSemDataParto.xls",
-              "GRÁVIDAS SEM DATA DE PARTO",
+              "MarcadosSeguimentoLevantamento.xls",
+              "MARCADOS PARA SEGUIMENTO OU LEVANTAMENTO",
               getExcelDesignUuid(),
               null);
       Properties props = new Properties();
-      props.put("repeatingSections", "sheet:1,row:8,dataset:GRAVIDAS");
+      props.put("repeatingSections", "sheet:1,row:8,dataset:MARCADOS");
       props.put("sortWeight", "5000");
       reportDesign.setProperties(props);
     } catch (IOException e) {
@@ -53,17 +53,17 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
 
   @Override
   public String getUuid() {
-    return "dc98f7c6-e9d8-11e9-a398-dfe515d7157b";
+    return "bafd4f4a-32ee-11ea-b938-eb0f601850f7";
   }
 
   @Override
   public String getName() {
-    return "ARIEL - LISTA DE GRÁVIDAS COM MAIS DE 9 MESES QUE NÃO TEM DATA DE PARTO";
+    return "ARIEL - LISTA DE PACIENTES MARCADOS PARA SEGUIMENTO OU LEVANTAMENTO";
   }
 
   @Override
   public String getDescription() {
-    return "São pacientes registadas como grávidas há mais de 9 meses e que não têm data de parto registada";
+    return "Sao pacientes que têm consulta de seguimento ou levantamento marcado";
   }
 
   @Override
@@ -74,15 +74,15 @@ public class SetupGravidasSemDataPartoReport extends ArielDataExportManager {
     rd.setDescription(getDescription());
     rd.setParameters(getParameters());
     rd.addDataSetDefinition(
-        "GRAVIDAS",
+        "MARCADOS",
         Mapped.mapStraightThrough(
-            ArielReportsDataSets.getGravidasSemDataPartoDataSet(getParameters())));
+            ArielReportsDataSets.getMarcadosSeguimentoOuLevantamento(getParameters())));
     return rd;
   }
 
   @Override
   public String getVersion() {
-    return "0.3";
+    return "0.2";
   }
 
   @Override
